@@ -22,7 +22,6 @@ public class LoginService {
 
         if (user != null) {
 
-            //compare the password hash
             boolean confirmPassword = passwordEncoder.bCryptPasswordEncoder()
                     .matches(login.getPassword(), user.getPassword());
 
@@ -33,8 +32,6 @@ public class LoginService {
 
         }
 
-        // return auser user with
         return null;
-
     }
 }
