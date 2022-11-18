@@ -66,6 +66,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>spring_docker</finalName>
 	</build>
 
 </project>
