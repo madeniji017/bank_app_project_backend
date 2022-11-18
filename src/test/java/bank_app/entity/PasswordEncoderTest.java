@@ -11,11 +11,11 @@ class PasswordEncoderTest {
     void bCryptPasswordEncoder() {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String testPassword = "hibernate";
+        String testPassword = "password";
         String codedPassword = passwordEncoder.encode(testPassword);
         System.out.println(codedPassword);
 
-        boolean confirmPassword = passwordEncoder.matches("hibernate", codedPassword);
+        boolean confirmPassword = passwordEncoder.matches("password", codedPassword);
         assertTrue(confirmPassword);
 
     }
