@@ -22,7 +22,7 @@ public class Account {
 
     @Setter(AccessLevel.NONE)
     @Id
-    private Integer acctNumber;
+    private Long acctNumber;
     private Double acctBalance;
 
     @ManyToOne
@@ -31,7 +31,7 @@ public class Account {
 
     public Account(String acctFirstName,
                    String acctLastName,
-                   Integer acctNumber,
+                   Long acctNumber,
                    Double acctBalance) {
         this.acctFirstName = user.getFirstName();
         this.acctLastName = user.getLastName();
