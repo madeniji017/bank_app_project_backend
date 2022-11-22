@@ -20,23 +20,20 @@ public class Account {
     private String acctLastName;
     private String acctStatus;
 
-    @Setter(AccessLevel.NONE)
     @Id
     private Long acctNumber;
     private Double acctBalance;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private User user;
 
-    public Account(String acctFirstName,
-                   String acctLastName,
-                   Long acctNumber,
-                   Double acctBalance) {
+    public Account(User user,
+                   Long acctNumber) {
         this.acctFirstName = user.getFirstName();
         this.acctLastName = user.getLastName();
         this.acctNumber = acctNumber;
-        this.acctBalance = acctBalance;
+        this.acctBalance = 0.00;
 
     }
 
