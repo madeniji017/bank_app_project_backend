@@ -1,7 +1,9 @@
 package bank_app.service;
 
 import bank_app.entity.Account;
+import bank_app.entity.AccountNumber;
 import bank_app.entity.User;
+import bank_app.repo.AccountRepo;
 import bank_app.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +18,14 @@ public class BankServiceImpl implements BankService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserRepo userRepo;
+
+    private User user;
+
+    private Account account;
+    @Autowired
+    private AccountRepo accountRepo;
+    @Autowired
+    private AccountNumber accountNumber;
 
 
     @Override
