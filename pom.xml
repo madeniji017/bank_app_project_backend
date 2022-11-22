@@ -22,6 +22,11 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+      		<groupId>com.h2database</groupId>
+      		<artifactId>h2</artifactId>
+      		<scope>runtime</scope>
+    	</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
@@ -56,7 +61,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
+				<configuration> on project springboot_bank_app: Execution repackage of goal org.springframework.boot:spring-boot-maven-plugin:2.7.5:repackage failed: Unable to find main class ->
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -68,5 +73,4 @@
 		</plugins>
 		<finalName>spring_docker</finalName>
 	</build>
-
 </project>
