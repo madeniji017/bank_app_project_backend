@@ -1,9 +1,13 @@
 package bank_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -12,10 +16,12 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String type;
 
-    @OneToOne(mappedBy = "role")
-    private User user;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
+    //@JsonManagedReference
+    private List<User> user;
 
 }
