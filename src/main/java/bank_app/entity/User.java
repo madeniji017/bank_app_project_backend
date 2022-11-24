@@ -1,12 +1,14 @@
 package bank_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
-
+@Component
 @NoArgsConstructor
 @Getter
 @Setter
@@ -27,12 +29,13 @@ public class User {
 
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    //@JsonBackReference
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Account> account;
+    private List<Account> accounts;
 
     public User(String firstName, String lastName, String emailAddress, String address, char gender) {
         this.firstName = firstName;
