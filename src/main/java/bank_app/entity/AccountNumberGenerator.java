@@ -19,14 +19,13 @@ public class AccountNumberGenerator {
 
 
     public synchronized Long generateAcctNumber() {
-        String tempAcctNum = String.format("%s%s%s", bankCode, branchCode, customerCode);
-        Long l = Long.parseLong(tempAcctNum);
+        String concatAcctNum = String.format("%s%s%s", bankCode, branchCode, customerCode);
+        Long parseAcctNum = Long.parseLong(concatAcctNum);
         customerCode++;
-        return l;
+        return parseAcctNum;
     }
 
     public AccountNumberGenerator() {}
-
 
 
 }
