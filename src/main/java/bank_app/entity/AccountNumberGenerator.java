@@ -1,14 +1,17 @@
 package bank_app.entity;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 
-@Component
-public class AccountNumber {
+@Entity
+public class AccountNumberGenerator {
 
-    public long bankCode = 10;
-    public long branchCode = 22;
-    public long customerCode = 100023;
+    @Id
+    private int id;
+    public long bankCode;
+    public long branchCode;
+    public long customerCode;
 
 
     public synchronized Long generateAcctNumber() {
@@ -18,7 +21,7 @@ public class AccountNumber {
         return l;
     }
 
-    public AccountNumber() {}
+    public AccountNumberGenerator() {}
 
 
 
