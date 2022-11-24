@@ -22,17 +22,17 @@ pipeline {
                 
             }
         }
-        stage("build"){
+        stage("Unit test"){
             steps {
                 script{
                     
-                    sh "cd bankapp_project_backend && mvn clean install"
+                    sh "cd bankapp_project_backend && mvn test"
                    
                     
                 }
             }
         }
-        stage("unit test"){
+        stage("Build"){
             steps {
                 script{
                     
