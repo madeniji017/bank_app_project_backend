@@ -22,21 +22,21 @@ pipeline {
                 
             }
         }
-        stage("Unit test"){
-            steps {
-                script{
-                    
-                    sh "cd bankapp_project_backend && mvn test"
-                   
-                    
-                }
-            }
-        }
         stage("Build"){
             steps {
                 script{
                     
                     sh "cd bankapp_project_backend && chmod +x mvnw && ./mvnw -B clean package -Dmaven.test.skip=true --file pom.xml"
+                   
+                    
+                }
+            }
+        }
+        stage("Unit test"){
+            steps {
+                script{
+                    
+                    sh "cd bankapp_project_backend && mvn test"
                    
                     
                 }
