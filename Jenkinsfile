@@ -22,7 +22,17 @@ pipeline {
                 
             }
         }
-        stage("Build"){
+        stage("build"){
+            steps {
+                script{
+                    
+                    sh "cd bankapp_project_backend && mvn clean install"
+                   
+                    
+                }
+            }
+        }
+        stage("unit test"){
             steps {
                 script{
                     
@@ -35,7 +45,7 @@ pipeline {
         stage("Build image"){
             steps{
                 script{
-                    sh "cd bankapp_project_backend && docker build -t mlarry/backend_app:1.0 ."
+                    sh "cd bankapp_project_backend && docker build -t mlarry/backend_app:2.0 ."
                     
                 }
             }
@@ -45,7 +55,7 @@ pipeline {
             steps{
                 script{
                     sh "docker login -u ${env.user} -p ${env.passwd}"
-                    sh "docker push mlarry/backend_app:1.0"
+                    sh "docker push mlarry/backend_app:2.0"
                 }
             }
 
