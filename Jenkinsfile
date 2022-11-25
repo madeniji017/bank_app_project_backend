@@ -32,16 +32,16 @@ pipeline {
                 }
             }
         }
-        // stage("Unit test"){
-        //     steps {
-        //         script{
+        stage("Unit test"){
+             steps {
+                 script{
                     
-        //             sh "cd bankapp_project_backend && mvn test"
+                     sh "cd bankapp_project_backend && mvn test"
                    
                     
-        //         }
-        //     }
-        // }
+                 }
+             }
+         }
         stage("Build image"){
             steps{
                 script{
