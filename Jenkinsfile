@@ -43,6 +43,14 @@ pipeline {
     // }
          //  }
       // }
+        
+        stage("Sonar Analysis"){
+            steps{
+                withSonarQubeEnv('sonarqube-8.9.10'){
+                    sh "mvn sonar:sonar"
+                }
+            }
+        }
         stage("Build image"){
             steps{
                 script{
