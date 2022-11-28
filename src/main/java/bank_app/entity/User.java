@@ -1,6 +1,6 @@
 package bank_app.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,26 +23,27 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
-    private String emailAddress;
+    private String email;
     private String address;
     private char gender;
 
-    private String userName;
+    private String username;
 
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    //@JsonBackReference
     private Role role;
 
+
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Account> accounts;
 
-    public User(String firstName, String lastName, String emailAddress, String address, char gender) {
+    public User(String firstName, String lastName, String email, String address, char gender) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.emailAddress = emailAddress;
+        this.email = email;
         this.address = address;
         this.gender = gender;
     }
