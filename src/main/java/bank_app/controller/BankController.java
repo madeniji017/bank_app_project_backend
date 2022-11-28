@@ -1,7 +1,6 @@
 package bank_app.controller;
 
 import bank_app.entity.Account;
-import bank_app.entity.Login;
 import bank_app.entity.User;
 import bank_app.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
