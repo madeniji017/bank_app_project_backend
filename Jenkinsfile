@@ -1,6 +1,10 @@
 pipeline {
     
     agent any
+    
+      environment {
+        PATH = "$PATH:/usr/share/maven"
+    }
 
     stages {
         stage('Initial_cleanup'){
