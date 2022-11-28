@@ -19,7 +19,7 @@ public class LoginService {
     public User userLogin(Login login) {
 
 
-        User user = userRepo.findByEmailAddress(login.getEmailAddress());
+        User user = userRepo.findByEmail(login.getEmail());
 
         if (user != null) {
 
