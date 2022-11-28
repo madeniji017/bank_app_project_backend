@@ -13,4 +13,8 @@ public interface BankService {
     List<User> fetchUserList();
 
     Account createAccount(Long id);
+
+    void deleteAccountById(Long id);
+
+    User updateUser(Long id, User userUpdate);
 }
