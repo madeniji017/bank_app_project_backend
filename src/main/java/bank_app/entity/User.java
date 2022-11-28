@@ -25,7 +25,7 @@ public class User {
     private String lastName;
     private String email;
     private String address;
-    private char gender;
+   // private char gender;
 
     private String username;
 
@@ -40,11 +40,10 @@ public class User {
     @JsonManagedReference
     private List<Account> accounts;
 
-    public User(String firstName, String lastName, String email, String address, char gender) {
+    public User(String firstName, String lastName, String email, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
-        this.gender = gender;
     }
 }

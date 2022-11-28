@@ -135,11 +135,6 @@ public class BankServiceImpl implements BankService{
             user.setAddress(userUpdate.getAddress());
         }
 
-        if(Objects.nonNull(userUpdate.getGender()) &&
-                userUpdate.getGender() == 'M' ||
-                userUpdate.getGender() == 'F') {
-            user.setGender(userUpdate.getGender());
-        }
 
         if(Objects.nonNull(userUpdate.getUsername()) &&
                 !"".equalsIgnoreCase(userUpdate.getUsername())) {
