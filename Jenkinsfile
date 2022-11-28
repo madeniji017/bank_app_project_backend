@@ -36,18 +36,6 @@ pipeline {
                 }
             }
         }
-        // stage("Unit test"){
-        //   steps {
-        //       script{
-        //          
-        //           sh "cd bankapp_project_backend && mvn test"
-        //         
-        //          
-        //
-    // }
-         //  }
-      // }
-        
         stage("Sonar Analysis"){
             steps{
                 withSonarQubeEnv('sonarqube-8.9.10.61524'){
