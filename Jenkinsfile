@@ -26,6 +26,13 @@ pipeline {
                 
             }
         }
+        stage("Sonar Analysis"){
+            steps{
+                withSonarQubeEnv('sonarqube-8.9.10.61524'){
+                    sh "mvn sonar:sonar"
+                }
+            }
+        }
         stage("Build"){
             steps {
                 script{
@@ -36,13 +43,7 @@ pipeline {
                 }
             }
         }
-        stage("Sonar Analysis"){
-            steps{
-                withSonarQubeEnv('sonarqube-8.9.10.61524'){
-                    sh "mvn sonar:sonar"
-                }
-            }
-        }
+
         stage("Build image"){
             steps{
                 script{
