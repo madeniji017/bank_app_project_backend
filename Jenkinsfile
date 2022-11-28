@@ -10,7 +10,7 @@ pipeline {
         stage('Initial_cleanup'){
             steps {
 
-                dir ("${WORKSPACE}"){
+                dir ("${WORKSPACE}"){sonarqube-8.9.10.61524
                     deleteDir()
                 }
                 
@@ -50,7 +50,7 @@ pipeline {
         
         stage("Sonar Analysis"){
             steps{
-                withSonarQubeEnv('sonarqube-8.9.10'){
+                withSonarQubeEnv('sonarqube-8.9.10.61524'){
                     sh "mvn sonar:sonar"
                 }
             }
