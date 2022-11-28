@@ -37,5 +37,17 @@ public class BankController {
         return bankService.createAccount(id);
     }
 
+    @DeleteMapping("/delete-account/{id}")
+    public String deleteAccountById(@PathVariable("id") Long id) {
+        bankService.deleteAccountById(id);
+        return "Record successfully deleted";
+    }
+
+    @PutMapping("/update-users/{id}")
+    public User updateUser(@PathVariable("id") Long id,
+                           @RequestBody User userUpdate) {
+        return bankService.updateUser(id, userUpdate);
+    }
+
 
 }
