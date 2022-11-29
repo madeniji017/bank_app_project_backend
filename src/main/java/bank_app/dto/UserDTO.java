@@ -1,6 +1,9 @@
 package bank_app.dto;
 
+import bank_app.entity.Account;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class UserDTO {
@@ -13,10 +16,10 @@ public class UserDTO {
 
     private String address;
 
-    //private char gender;
-
     private String username;
 
     private String password;
+
+    private List<Account> accounts;
 
 }
