@@ -11,6 +11,4 @@ public class Login {
 
     private String password;
 
-
-
 }
