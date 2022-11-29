@@ -1,5 +1,6 @@
 package bank_app.controller;
 
+import bank_app.dto.UserDTO;
 import bank_app.entity.Account;
 import bank_app.entity.User;
 import bank_app.service.BankService;
@@ -15,19 +16,24 @@ public class BankController {
     @Autowired
     private BankService bankService;
 
-    @PostMapping("/create-user")
-    public User saveUser(@RequestBody User user) {
 
-        return bankService.saveUser(user);
+    //this API can be available on the Admin side as well
+    @PostMapping("/create-user")
+    public UserDTO saveUser(@RequestBody UserDTO userDTO) {
+
+        return bankService.saveUser(userDTO);
     }
 
+    //will be available on admin side only
     @GetMapping("/users/{id}")
     public User fetchUserById(@PathVariable("id") Long id) {
         return bankService.fetchUserById(id);
     }
 
+    //will be available on admin side only
     @GetMapping("/users")
-    public List<User> fetchUserList() {
+    public List<UserDTO> fetchUserList() {
+
         return bankService.fetchUserList();
     }
 
@@ -36,17 +42,20 @@ public class BankController {
         return bankService.createAccount(id);
     }
 
+    //will be available on admin side only
     @DeleteMapping("/delete-account/{id}")
     public String deleteAccountById(@PathVariable("id") Long id) {
         bankService.deleteAccountById(id);
         return "Record successfully deleted";
     }
 
+
     @PutMapping("/update-users/{id}")
-    public User updateUser(@PathVariable("id") Long id,
-                           @RequestBody User userUpdate) {
+    public UserDTO updateUser(@PathVariable("id") Long id,
+                           @RequestBody UserDTO userUpdate) {
         return bankService.updateUser(id, userUpdate);
     }
+
 
 
 }
