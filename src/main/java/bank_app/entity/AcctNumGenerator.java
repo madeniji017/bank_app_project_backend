@@ -20,7 +20,5 @@ public class AcctNumGenerator {
     private Long customerCode;
 
 
-    public AcctNumGenerator() {}
-
 
 }
