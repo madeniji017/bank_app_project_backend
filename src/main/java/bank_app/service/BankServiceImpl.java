@@ -1,5 +1,7 @@
 package bank_app.service;
 
+import bank_app.converter.UserConverter;
+import bank_app.dto.UserDTO;
 import bank_app.entity.Account;
 import bank_app.entity.AcctNumGenerator;
 import bank_app.entity.Role;
@@ -8,6 +10,7 @@ import bank_app.repo.AccountRepo;
 import bank_app.repo.AcctNumGeneratorRepo;
 import bank_app.repo.RoleRepo;
 import bank_app.repo.UserRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,10 @@ public class BankServiceImpl implements BankService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private User user;
+
+    @Autowired
+    UserConverter userConverter;
+
     @Autowired
     private UserRepo userRepo;
 
@@ -40,6 +47,8 @@ public class BankServiceImpl implements BankService{
     @Autowired
     private AcctNumGeneratorRepo acctNumGeneratorRepo;
 
+
+
     public synchronized Long generateAcctNumber() {
         acctNumGenerator = acctNumGeneratorRepo.findById(1L).get();
         String concatAcctNum = String.format("%s%s%s",
@@ -55,10 +64,12 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public User saveUser(User user) {
+    public UserDTO saveUser(UserDTO userDTO) {
+
+        user = userConverter.convertDtoToEntity(userDTO);
 
         //encrypt the password provided by the user
-        String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
         user.setPassword(hashedPassword);
 
         //assign from the db the role type with the id of 2
@@ -78,7 +89,7 @@ public class BankServiceImpl implements BankService{
         account.setUser(user);
         accountRepo.save(account);
 
-        return user;
+        return userConverter.convertEntityToDto(user);
     }
 
     @Override
@@ -87,8 +98,11 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public List<User> fetchUserList() {
-        return userRepo.findAll();
+    public List<UserDTO> fetchUserList() {
+        
+        List<User> userList = userRepo.findAll();
+        return userConverter.convertEntityListToDto(userList);
+
     }
 
     @Override
@@ -109,7 +123,10 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public User updateUser(Long id, User userUpdate) {
+    public UserDTO updateUser(Long id, UserDTO userUpdate) {
+
+        user = userConverter.convertDtoToEntity(userUpdate);
+
         user = userRepo.findById(id).get();
         List<Account> accounts = user.getAccounts();
 
@@ -135,13 +152,14 @@ public class BankServiceImpl implements BankService{
             user.setAddress(userUpdate.getAddress());
         }
 
-
         if(Objects.nonNull(userUpdate.getUsername()) &&
                 !"".equalsIgnoreCase(userUpdate.getUsername())) {
             user.setUsername(userUpdate.getUsername());
         }
 
-        return userRepo.save(user);
+        userRepo.save(user);
+
+        return userConverter.convertEntityToDto(user);
     }
 
 }
