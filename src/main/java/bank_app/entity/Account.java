@@ -1,8 +1,6 @@
 package bank_app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +8,20 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+
+
+
+
+
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "account")
+@Table(name = "account",
+        uniqueConstraints = @UniqueConstraint(
+                name = "acctNumber",
+                columnNames = "acctNumber"
+        ))
 public class Account {
 
     @Id

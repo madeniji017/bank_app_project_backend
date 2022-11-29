@@ -14,7 +14,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "user",
+        uniqueConstraints = @UniqueConstraint(
+                name = "email",
+                columnNames = "email"
+        ))
 public class User {
 
     @Id

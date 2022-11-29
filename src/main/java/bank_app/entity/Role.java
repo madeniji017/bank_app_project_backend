@@ -1,7 +1,6 @@
 package bank_app.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "role")
+@Table(name = "role",
+        uniqueConstraints = @UniqueConstraint(
+                name = "type",
+                columnNames = "type"
+        ))
 public class Role {
 
     @Id
