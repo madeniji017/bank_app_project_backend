@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 @Component
 @NoArgsConstructor
@@ -28,11 +31,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+    private String phoneNumber;
     private String address;
 
     private String username;
 
     private String password;
+
+    private String confirmPassword;
+
+    private LocalDate dateOfBirth;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
