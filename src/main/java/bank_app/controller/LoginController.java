@@ -2,7 +2,8 @@ package bank_app.controller;
 
 import bank_app.entity.Login;
 import bank_app.entity.User;
-import bank_app.service.LoginService;
+import bank_app.service.AdminLoginService;
+import bank_app.service.CustomerLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private LoginService loginService;
+    private CustomerLoginService customerLoginService;
+
+    @Autowired
+    private AdminLoginService adminLoginService;
+
+
 
     @PostMapping("/login")
-    public User userLogin(@RequestBody Login login) {
+    public User customerLogin(@RequestBody Login login) {
 
-        return loginService.userLogin(login);
+        return customerLoginService.customerLogin(login);
+
+    }
+
+    @PostMapping("/admin/login")
+    public User adminLogin(@RequestBody Login login) {
+
+        return adminLoginService.adminLogin(login);
 
     }
 }
