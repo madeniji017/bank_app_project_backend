@@ -9,29 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginService {
+public class CustomerLoginService {
 
     @Autowired
     private UserRepo userRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User userLogin(Login login) {
+    public User customerLogin(Login login) {
 
 
-        User user = userRepo.findByEmail(login.getEmail());
+        User customer = userRepo.findByEmail(login.getEmail());
 
-        if (user != null) {
+        if (customer != null) {
 
             boolean confirmPassword = passwordEncoder.bCryptPasswordEncoder()
-                    .matches(login.getPassword(), user.getPassword());
+                    .matches(login.getPassword(), customer.getPassword());
 
-            if(confirmPassword) {
+            if(confirmPassword && customer.getRole().getId() == 2) {
 
-                return user;
+                return customer;
             }
 
         } else {
+
             throw new ApiRequestException("Invalid email/password");
         }
 
