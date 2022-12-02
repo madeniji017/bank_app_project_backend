@@ -22,15 +22,25 @@ pipeline {
                 
             }
         }
-        stage("Build"){
+        stage("test"){
             steps {
                 script{
                     
-                    sh "cd bankapp_project_backend"
+                    sh "cd bankapp_project_backend && chmod +x mvnw && ./mvnw -B clean package -Dmaven.test.skip=true --file pom.xml"
                    
                     
                 }
             }
+        }
+        stage("Sonar Analysis"){
+            steps{
+                withSonarQubeEnv('sonarqube-8.9.10'){
+                    sh "mvn sonar:sonar"
+                }
+            }
+        
+        
+        
         }
         stage("Build image"){
             steps{
@@ -45,7 +55,7 @@ pipeline {
             steps{
                 script{
                     sh "docker login -u ${env.user} -p ${env.passwd}"
-                    sh "docker push mlarry/backend_app:1.0"
+                    sh "docker push mlarry/backend_app"
                 }
             }
 
