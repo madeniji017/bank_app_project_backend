@@ -4,7 +4,6 @@ import bank_app.dto.UserDTO;
 import bank_app.entity.Account;
 import bank_app.entity.User;
 import bank_app.service.BankService;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,41 +20,43 @@ public class BankController {
 
     //this API can be available on the Admin side as well
     @PostMapping("/create-user")
-    public UserDTO saveUser(@RequestBody UserDTO userDTO) {
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
 
-        return bankService.saveUser(userDTO);
+        return bankService.createUser(userDTO);
     }
 
     //will be available on admin side only
-    @GetMapping("/users/{id}")
-    public User fetchUserById(@PathVariable("id") Long id) {
-        return bankService.fetchUserById(id);
+    @GetMapping("/user")
+    public User fetchUserByEmail(@RequestBody UserDTO userDTO) {
+        return bankService.fetchUserByEmail(userDTO);
     }
 
     //will be available on admin side only
-    @GetMapping("/users")
+    @GetMapping("/user-list")
     public List<UserDTO> fetchUserList() {
 
         return bankService.fetchUserList();
     }
 
-    @PostMapping("/create-account/{id}")
-    public Account createAccount(@PathVariable("id") Long id) {
-        return bankService.createAccount(id);
+    //ignore this for now
+    @PostMapping("/create-account")
+    public Account createAccount(@RequestBody UserDTO userDTO) {
+
+        return bankService.createAccount(userDTO);
     }
 
+
     //will be available on admin side only
-    @DeleteMapping("/delete-account/{id}")
-    public String deleteAccountById(@PathVariable("id") Long id) {
-        bankService.deleteAccountById(id);
+    @DeleteMapping("/delete-account")
+    public String deleteAccountByEmail(@RequestBody UserDTO userDTO) {
+        bankService.deleteAccountByEmail(userDTO);
         return "Record successfully deleted";
     }
 
 
-    @PutMapping("/update-users/{id}")
-    public UserDTO updateUser(@PathVariable("id") Long id,
-                           @RequestBody @Valid UserDTO userUpdate) {
-        return bankService.updateUser(id, userUpdate);
+    @PutMapping("/update-user")
+    public UserDTO updateUser(@RequestBody @Valid UserDTO userUpdate) {
+        return bankService.updateUser(userUpdate);
     }
 
 

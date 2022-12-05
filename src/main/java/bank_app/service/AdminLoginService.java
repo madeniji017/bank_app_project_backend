@@ -30,7 +30,7 @@ public class AdminLoginService {
 
         } else {
 
-            throw new ApiRequestException("Invalid email/password");
+            throw new ApiRequestException("Unauthorized sign in");
         }
 
         return null;

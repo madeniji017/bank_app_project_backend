@@ -8,11 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-
-
-
-
-
 @NoArgsConstructor
 @Getter
 @Setter
@@ -30,7 +25,8 @@ public class Account {
     private Long id;
     private String acctFirstName;
     private String acctLastName;
-    private String acctStatus;
+
+    private String acctType;
     private Long acctNumber;
     private Double acctBalance;
 

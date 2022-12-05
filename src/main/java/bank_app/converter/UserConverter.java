@@ -14,26 +14,25 @@ public class UserConverter {
     public UserDTO convertEntityToDto(User user) {
 
         ModelMapper modelMapper = new ModelMapper();
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
 
     }
 
     public List<UserDTO> convertEntityListToDto(List<User> userList) {
-        return userList.stream().map(x -> convertEntityToDto(x)).collect(Collectors.toList());
+
+        //lambda is replaced here with method reference
+        return userList.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     public User convertDtoToEntity(UserDTO userDTO) {
 
         ModelMapper modelMapper = new ModelMapper();
-        User user = modelMapper.map(userDTO, User.class);
-
-        return  user;
+        return modelMapper.map(userDTO, User.class);
     }
 
     public List<User> convertDtoListToEntity(List<UserDTO> userDTOList) {
-        return userDTOList.stream().map(x -> convertDtoToEntity(x)).collect(Collectors.toList());
+        return userDTOList.stream().map(this::convertDtoToEntity).collect(Collectors.toList());
     }
 
 

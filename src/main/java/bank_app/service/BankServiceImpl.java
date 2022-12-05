@@ -6,16 +6,19 @@ import bank_app.entity.Account;
 import bank_app.entity.AcctNumGenerator;
 import bank_app.entity.Role;
 import bank_app.entity.User;
+import bank_app.exception.ApiRequestException;
 import bank_app.repo.AccountRepo;
 import bank_app.repo.AcctNumGeneratorRepo;
 import bank_app.repo.RoleRepo;
 import bank_app.repo.UserRepo;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,31 +29,26 @@ public class BankServiceImpl implements BankService{
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private User user;
-
     @Autowired
     UserConverter userConverter;
-
     @Autowired
     private UserRepo userRepo;
-
     private Role role;
     @Autowired
     private RoleRepo roleRepo;
-
     private Account account;
     @Autowired
     private AccountRepo accountRepo;
-
     @Autowired
     private AcctNumGenerator acctNumGenerator;
-
     @Autowired
     private AcctNumGeneratorRepo acctNumGeneratorRepo;
 
 
 
     public synchronized Long generateAcctNumber() {
-        acctNumGenerator = acctNumGeneratorRepo.findById(1L).get();
+        Optional<AcctNumGenerator> acctNumGeneratorOptional = acctNumGeneratorRepo.findById(1L);
+        acctNumGeneratorOptional.ifPresent(value -> acctNumGenerator = value);
         String concatAcctNum = String.format("%s%s%s",
                 acctNumGenerator.getBankCode(),
                 acctNumGenerator.getBranchCode(),
@@ -58,43 +56,77 @@ public class BankServiceImpl implements BankService{
 
         //increment the customerCode in the db and save for next usage
         acctNumGenerator.setCustomerCode(acctNumGenerator.getCustomerCode() + 1);
+
+        //insert bvn update statement here
+
+
         acctNumGeneratorRepo.save(acctNumGenerator);
 
         return Long.parseLong(concatAcctNum);
     }
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
 
         user = userConverter.convertDtoToEntity(userDTO);
 
-        //encrypt the password provided by the user
+        //encrypt the password & confirmPassword provided by the user
         String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
         user.setPassword(hashedPassword);
 
-        //assign from the db the role type with the id of 2
-        Optional<Role> optionalRole = roleRepo.findById(2L);
-        optionalRole.ifPresent(value -> role = value);
+        String hashedConfirmPassword = bCryptPasswordEncoder.encode(userDTO.getConfirmPassword());
+        user.setConfirmPassword(hashedConfirmPassword);
 
-        user.setRole(role);
-        userRepo.save(user);
+        if(Objects.equals(userDTO.getPassword(), userDTO.getConfirmPassword())) {
 
-        //generate an account and assign to this newly created user
-        user = userRepo.findById(user.getId()).get();
-        Long userAcctNum = generateAcctNumber();
+            //assign from the db the role type with the id of 2
+            Optional<Role> optionalRole = roleRepo.findById(2L);
+            optionalRole.ifPresent(value -> role = value);
+            user.setRole(role);
 
-        //
-        account = new Account(user, userAcctNum);
-        account.setAcctStatus("Active");
-        account.setUser(user);
-        accountRepo.save(account);
+            //convert string to date and assign to user
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+            LocalDate date = LocalDate.parse(userDTO.getDateOfBirth(), formatter);
+            user.setDateOfBirth(date);
 
-        return userConverter.convertEntityToDto(user);
+            userRepo.save(user);
+
+            //generate an account and assign to this newly created user
+            Optional<User> optionalUser = userRepo.findById(user.getId());
+            optionalUser.ifPresent(value -> user = value);
+            Long userAcctNum = generateAcctNumber();
+
+            //
+            account = new Account(user, userAcctNum);
+
+            if(user.getAcctType() == 1) {
+                account.setAcctType("Savings");
+            } else if (user.getAcctType() == 2) {
+                account.setAcctType("Current");
+            } else {
+
+                //customise the exception to throw here
+                throw new ApiRequestException("Incomplete details provided");
+            }
+
+            account.setUser(user);
+            accountRepo.save(account);
+
+            return userConverter.convertEntityToDto(user);
+
+        } else {
+
+            //customise the exception to throw here
+            throw new ApiRequestException("Password and Confirm password not the same");
+
+        }
     }
 
     @Override
-    public User fetchUserById(Long id) {
-        return userRepo.findById(id).get();
+    public User fetchUserByEmail(UserDTO userDTO) {
+
+        user = userConverter.convertDtoToEntity(userDTO);
+        return userRepo.findByEmail(user.getEmail());
     }
 
     @Override
@@ -106,28 +138,23 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public Account createAccount(Long id) {
-        user = userRepo.findById(id).get();
-        Long userAcctNum = generateAcctNumber();
-        account = new Account(user, userAcctNum);
-        account.setAcctStatus("Active");
-        account.setUser(user);
-        accountRepo.save(account);
+    public void deleteAccountByEmail(UserDTO userDTO) {
+        user = userConverter.convertDtoToEntity(userDTO);
+        user = userRepo.findByEmail(userDTO.getEmail());
 
-        return account;
+        if(user != null ) {
+            accountRepo.deleteAll(user.getAccounts());
+
+        } else {
+            throw new ApiRequestException("Cannot delete account");
+        }
     }
 
     @Override
-    public void deleteAccountById(Long id) {
-        accountRepo.deleteById(id);
-    }
-
-    @Override
-    public UserDTO updateUser(Long id, UserDTO userUpdate) {
+    public UserDTO updateUser(UserDTO userUpdate) {
 
         user = userConverter.convertDtoToEntity(userUpdate);
 
-        user = userRepo.findById(id).get();
         List<Account> accounts = user.getAccounts();
 
         if(Objects.nonNull(userUpdate.getFirstName()) && !"".equalsIgnoreCase(userUpdate.getFirstName())) {
@@ -162,4 +189,16 @@ public class BankServiceImpl implements BankService{
         return userConverter.convertEntityToDto(user);
     }
 
+
+    @Override
+    public Account createAccount(UserDTO userDTO) {
+        user = userConverter.convertDtoToEntity(userDTO);
+        user = userRepo.findByEmail(userDTO.getEmail());
+        Long userAcctNum = generateAcctNumber();
+        account = new Account(user, userAcctNum);
+        account.setUser(user);
+        accountRepo.save(account);
+
+        return account;
+    }
 }

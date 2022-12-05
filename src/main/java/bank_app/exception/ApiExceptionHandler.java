@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -25,4 +24,23 @@ public class ApiExceptionHandler {
         //Return response entity
         return new ResponseEntity<>(apiException, badRequest);
     }
+
+    /*
+    @Override
+    public ResponseEntity<Object> adminLoginException(ApiException e) {
+
+        HttpStatus badRequest = HttpStatus.UNAUTHORIZED;
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                badRequest,
+                ZonedDateTime.now(ZoneId.of("Z")));
+
+        //Return response entity
+        return new ResponseEntity<>(apiException, badRequest);
+
+    }
+
+     */
+
+
 }

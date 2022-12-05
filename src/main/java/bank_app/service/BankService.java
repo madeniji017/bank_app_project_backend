@@ -7,15 +7,15 @@ import bank_app.entity.User;
 import java.util.List;
 
 public interface BankService {
-    UserDTO saveUser(UserDTO userDTO);
+    UserDTO createUser(UserDTO userDTO);
 
-    User fetchUserById(Long id);
+    User fetchUserByEmail(UserDTO userDTO);
 
     List<UserDTO> fetchUserList();
 
-    Account createAccount(Long id);
+    Account createAccount(UserDTO userDTO);
 
-    void deleteAccountById(Long id);
+    void deleteAccountByEmail(UserDTO userDTO);
 
-    UserDTO updateUser(Long id, UserDTO userUpdate);
+    UserDTO updateUser(UserDTO userUpdate);
 }
