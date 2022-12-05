@@ -35,7 +35,7 @@ pipeline {
         stage("Sonar Analysis"){
             steps{
                 withSonarQubeEnv('sonarqube-8.9.10'){
-                    sh "mvn sonar:sonar"
+                    sh "cd bankapp_project_backend && mvn sonar:sonar"
                 }
             }
         
