@@ -10,9 +10,11 @@ public class UserDTO {
 
     private String firstName;
 
-    //private String middleName;
+    private String middleName;
 
     private String lastName;
+
+    private String BVN;
 
     private String email;
 

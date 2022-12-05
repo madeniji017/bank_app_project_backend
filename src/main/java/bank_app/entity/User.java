@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 @Component
 @AllArgsConstructor
@@ -33,8 +31,10 @@ public class User {
     private Long id;
     private String firstName;
 
-    //private String middleName;
+    private String middleName;
     private String lastName;
+
+    private String BVN;
     @NotBlank
     private String email;
 
