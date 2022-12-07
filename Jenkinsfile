@@ -22,7 +22,7 @@ pipeline {
                 
             }
         }
-        stage("test"){
+        stage("test and build"){
             steps {
                 script{
                     
