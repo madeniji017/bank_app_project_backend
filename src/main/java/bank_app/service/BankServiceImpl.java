@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BankServiceImpl implements BankService{
@@ -37,6 +34,7 @@ public class BankServiceImpl implements BankService{
     @Autowired
     private RoleRepo roleRepo;
     private Account account;
+
     @Autowired
     private AccountRepo accountRepo;
     @Autowired
@@ -56,8 +54,6 @@ public class BankServiceImpl implements BankService{
 
         //increment the customerCode in the db and save for next usage
         acctNumGenerator.setCustomerCode(acctNumGenerator.getCustomerCode() + 1);
-
-        //insert bvn update statement here
 
 
         acctNumGeneratorRepo.save(acctNumGenerator);
@@ -112,6 +108,11 @@ public class BankServiceImpl implements BankService{
             account.setUser(user);
             accountRepo.save(account);
 
+            List<Account> accounts = new ArrayList<>();
+            accounts.add(account);
+
+            user.setAccounts(accounts);
+
             return userConverter.convertEntityToDto(user);
 
         } else {
@@ -125,6 +126,7 @@ public class BankServiceImpl implements BankService{
     @Override
     public User fetchUserByEmail(UserDTO userDTO) {
 
+        
         user = userConverter.convertDtoToEntity(userDTO);
         return userRepo.findByEmail(user.getEmail());
     }
