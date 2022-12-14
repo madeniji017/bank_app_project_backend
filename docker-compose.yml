@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  frontend:
+    image: mlarry/frontend_app:1.0
+    ports:
+      - 3001:3000
+  backend:
+    build: ./
+    ports:
+      - 3000:3000
+    # environment:
+    #   DB_URL: mysql://database/bank_backend 
+  database:
+    image: mysql:8.0.31-debian
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
