@@ -6,12 +6,14 @@ import bank_app.entity.User;
 import bank_app.service.BankService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -34,11 +36,13 @@ class BankControllerTest {
     @MockBean
     private UserConverter userConverter;
 
+    private String baseUrl = "http://localhost:8080/api/v1";
+
 
     @Test
-    void fetchUserList() throws Exception {
+    void fetchUserList() throws Exception{
 
-        List<User> userList = new LinkedList<>();
+        List<User> userList = new ArrayList<>();
 
         User user1 = new User("Raji", "Fashola", "rfash@gmail.com",
                 "15 Musa road, Balarabe estate");
@@ -50,9 +54,11 @@ class BankControllerTest {
 
         List<UserDTO> userDTOList = userConverter.convertEntityListToDto(userList);
 
+        bankService.fetchUserList();
+
         Mockito.when(bankService.fetchUserList()).thenReturn(userDTOList);
 
-        String url = "/user-list";
+        String url = baseUrl+"/user-list";
 
         mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 
