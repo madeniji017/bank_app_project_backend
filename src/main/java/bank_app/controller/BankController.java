@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+//@CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("api/v1")
 public class BankController {
@@ -28,6 +29,7 @@ public class BankController {
     //will be available on admin side only
     @GetMapping("/user")
     public User fetchUserByEmail(@RequestBody UserDTO userDTO) {
+
         return bankService.fetchUserByEmail(userDTO);
     }
 
