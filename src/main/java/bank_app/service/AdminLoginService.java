@@ -2,6 +2,7 @@ package bank_app.service;
 
 import bank_app.entity.Login;
 import bank_app.entity.User;
+import bank_app.exception.AdminLoginException;
 import bank_app.exception.ApiRequestException;
 import bank_app.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,10 @@ public class AdminLoginService {
 
         } else {
 
-            throw new ApiRequestException("Unauthorized sign in");
+            throw new AdminLoginException("Unauthorized sign in attempt");
         }
 
         return null;
     }
+
 }
