@@ -1,6 +1,7 @@
 package bank_app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +33,13 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @Getter(AccessLevel.NONE)
     private User user;
+
+    @JsonBackReference
+    public User getUser() {
+        return user;
+    }
 
     public Account(User user,
                    Long acctNumber) {

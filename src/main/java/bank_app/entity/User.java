@@ -1,15 +1,16 @@
 package bank_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.List;
 @Component
@@ -19,25 +20,33 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user",
-        uniqueConstraints = @UniqueConstraint(
-                name = "email",
-                columnNames = "email"
-        ))
+        uniqueConstraints = {@UniqueConstraint
+                (columnNames = {"email", "phoneNumber"})
+        })
+
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
+    @NotBlank
+    @Length(min = 3)
     private String firstName;
 
     private String middleName;
+    @NotBlank
+    @Length(min = 3)
     private String lastName;
 
-    private String BVN;
     @NotBlank
+    private String BVN;
+
+    @Email
+    @NotEmpty(message = "Invalid email address")
     private String email;
 
+    @NotBlank
     private String phoneNumber;
     private String address;
 
@@ -49,6 +58,7 @@ public class User {
     @NotBlank
     private String confirmPassword;
 
+    @NotBlank
     private LocalDate dateOfBirth;
 
     @Transient
@@ -60,7 +70,8 @@ public class User {
 
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @Getter(AccessLevel.NONE)
+    //@Setter(AccessLevel.NONE)
     private List<Account> accounts;
 
     public User(String firstName, String lastName, String email, String address) {
@@ -68,5 +79,11 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+    }
+
+
+    @JsonManagedReference
+    public List<Account> getAccounts() {
+        return accounts;
     }
 }
