@@ -4,10 +4,10 @@ import bank_app.dto.UserDTO;
 import bank_app.entity.Account;
 import bank_app.entity.User;
 import bank_app.service.BankService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 //@CrossOrigin(origins = "http://localhost:4000")
