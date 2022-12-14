@@ -25,22 +25,22 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, badRequest);
     }
 
-    /*
-    @Override
-    public ResponseEntity<Object> adminLoginException(ApiException e) {
 
-        HttpStatus badRequest = HttpStatus.UNAUTHORIZED;
+    @ExceptionHandler(value = {AdminLoginException.class})
+    public ResponseEntity<Object> adminLoginException(ApiRequestException e) {
+
+        HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
         ApiException apiException = new ApiException(
                 e.getMessage(),
-                badRequest,
+                unauthorized,
                 ZonedDateTime.now(ZoneId.of("Z")));
 
         //Return response entity
-        return new ResponseEntity<>(apiException, badRequest);
+        return new ResponseEntity<>(apiException, unauthorized);
 
     }
 
-     */
+
 
 
 }
