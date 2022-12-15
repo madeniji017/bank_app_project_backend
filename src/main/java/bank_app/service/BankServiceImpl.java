@@ -181,7 +181,8 @@ public class BankServiceImpl implements BankService{
         return userConverter.convertEntityToDto(user);
     }
 
-
+    //ignore this for now
+    /*
     @Override
     public Account createAccount(UserDTO userDTO) {
         user = userConverter.convertDtoToEntity(userDTO);
@@ -193,4 +194,6 @@ public class BankServiceImpl implements BankService{
 
         return account;
     }
+
+     */
 }

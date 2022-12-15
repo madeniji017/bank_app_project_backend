@@ -1,7 +1,6 @@
 package bank_app.service;
 
 import bank_app.dto.UserDTO;
-import bank_app.entity.Account;
 import bank_app.entity.User;
 
 import java.util.List;
@@ -13,9 +12,10 @@ public interface BankService {
 
     List<UserDTO> fetchUserList();
 
-    Account createAccount(UserDTO userDTO);
+    UserDTO updateUser(UserDTO userUpdate);
 
     void deleteAccountByEmail(UserDTO userDTO);
 
-    UserDTO updateUser(UserDTO userUpdate);
+    // Account createAccount(UserDTO userDTO);
+
 }

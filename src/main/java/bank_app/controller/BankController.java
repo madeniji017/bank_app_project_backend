@@ -1,13 +1,12 @@
 package bank_app.controller;
 
 import bank_app.dto.UserDTO;
-import bank_app.entity.Account;
 import bank_app.entity.User;
 import bank_app.service.BankService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 //@CrossOrigin(origins = "http://localhost:4000")
@@ -40,14 +39,6 @@ public class BankController {
         return bankService.fetchUserList();
     }
 
-    //ignore this for now
-    @PostMapping("/create-account")
-    public Account createAccount(@RequestBody UserDTO userDTO) {
-
-        return bankService.createAccount(userDTO);
-    }
-
-
     //will be available on admin side only
     @DeleteMapping("/delete-account")
     public String deleteAccountByEmail(@RequestBody UserDTO userDTO) {
@@ -55,12 +46,20 @@ public class BankController {
         return "Record successfully deleted";
     }
 
-
     @PutMapping("/update-user")
     public UserDTO updateUser(@RequestBody @Valid UserDTO userUpdate) {
         return bankService.updateUser(userUpdate);
     }
 
 
+    //ignore this for now
+    /*
+    @PostMapping("/create-account")
+    public Account createAccount(@RequestBody UserDTO userDTO) {
+
+        return bankService.createAccount(userDTO);
+    }
+
+     */
 
 }
