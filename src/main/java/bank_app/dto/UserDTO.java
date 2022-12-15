@@ -20,10 +20,6 @@ public class UserDTO {
 
     private String phoneNumber;
 
-    private String address;
-
-    private String username;
-
     private String password;
 
     private String confirmPassword;

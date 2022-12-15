@@ -176,16 +176,6 @@ public class BankServiceImpl implements BankService{
             user.setEmail(userUpdate.getEmail());
         }
 
-        if(Objects.nonNull(userUpdate.getAddress()) &&
-                !"".equalsIgnoreCase(userUpdate.getAddress())) {
-            user.setAddress(userUpdate.getAddress());
-        }
-
-        if(Objects.nonNull(userUpdate.getUsername()) &&
-                !"".equalsIgnoreCase(userUpdate.getUsername())) {
-            user.setUsername(userUpdate.getUsername());
-        }
-
         userRepo.save(user);
 
         return userConverter.convertEntityToDto(user);
