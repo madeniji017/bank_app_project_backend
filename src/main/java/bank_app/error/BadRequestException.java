@@ -1,2 +1,12 @@
-package bank_app.error;public class BadRequestException {
+package bank_app.error;
+
+public class BadRequestException extends Exception {
+
+    public BadRequestException() {
+        super();
+    }
+
+    public BadRequestException(String message) {
+        super(message);
+    }
 }
