@@ -2,6 +2,8 @@ package bank_app.controller;
 
 import bank_app.dto.UserDTO;
 import bank_app.entity.User;
+import bank_app.error.BadRequestException;
+import bank_app.error.UserNotFoundException;
 import bank_app.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,14 @@ public class BankController {
 
     //this API can be available on the Admin side as well
     @PostMapping("/create-user")
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+    public UserDTO createUser(@RequestBody UserDTO userDTO) throws BadRequestException {
 
         return bankService.createUser(userDTO);
     }
 
     //will be available on admin side only
     @GetMapping("/user")
-    public User fetchUserByEmail(@RequestBody UserDTO userDTO) {
+    public User fetchUserByEmail(@RequestBody UserDTO userDTO) throws UserNotFoundException {
 
         return bankService.fetchUserByEmail(userDTO);
     }
@@ -41,7 +43,7 @@ public class BankController {
 
     //will be available on admin side only
     @DeleteMapping("/delete-account")
-    public String deleteAccountByEmail(@RequestBody UserDTO userDTO) {
+    public String deleteAccountByEmail(@RequestBody UserDTO userDTO) throws UserNotFoundException {
         bankService.deleteAccountByEmail(userDTO);
         return "Record successfully deleted";
     }

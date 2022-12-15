@@ -6,6 +6,8 @@ import bank_app.entity.Account;
 import bank_app.entity.AcctNumGenerator;
 import bank_app.entity.Role;
 import bank_app.entity.User;
+import bank_app.error.BadRequestException;
+import bank_app.error.UserNotFoundException;
 import bank_app.exception.ApiRequestException;
 import bank_app.repo.AccountRepo;
 import bank_app.repo.AcctNumGeneratorRepo;
@@ -62,7 +64,7 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) throws BadRequestException {
 
         user = userConverter.convertDtoToEntity(userDTO);
 
@@ -101,8 +103,7 @@ public class BankServiceImpl implements BankService{
                 account.setAcctType("Current");
             } else {
 
-                //customise the exception to throw here
-                throw new ApiRequestException("Incomplete details provided");
+                throw new BadRequestException("Please provide a valid account type");
             }
 
             account.setUser(user);
@@ -117,18 +118,24 @@ public class BankServiceImpl implements BankService{
 
         } else {
 
-            //customise the exception to throw here
-            throw new ApiRequestException("Password and Confirm password not the same");
+            throw new BadRequestException("Password and Confirm password not the same");
 
         }
     }
 
     @Override
-    public User fetchUserByEmail(UserDTO userDTO) {
+    public User fetchUserByEmail(UserDTO userDTO) throws UserNotFoundException {
 
-        
         user = userConverter.convertDtoToEntity(userDTO);
-        return userRepo.findByEmail(user.getEmail());
+        user = userRepo.findByEmail(user.getEmail());
+        if(user == null){
+
+            throw new UserNotFoundException("No user found with the email");
+
+        }else{
+
+            return user;
+        }
     }
 
     @Override
@@ -140,7 +147,7 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public void deleteAccountByEmail(UserDTO userDTO) {
+    public void deleteAccountByEmail(UserDTO userDTO) throws UserNotFoundException {
         user = userConverter.convertDtoToEntity(userDTO);
         user = userRepo.findByEmail(userDTO.getEmail());
 
@@ -148,7 +155,7 @@ public class BankServiceImpl implements BankService{
             accountRepo.deleteAll(user.getAccounts());
 
         } else {
-            throw new ApiRequestException("Cannot delete account");
+            throw new UserNotFoundException("Cannot delete. No user with provided email");
         }
     }
 
