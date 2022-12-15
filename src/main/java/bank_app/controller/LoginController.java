@@ -23,14 +23,14 @@ public class LoginController {
 
 
 
-    @PostMapping("/login")
+    @PostMapping(value = "login", produces = "application/json", consumes = "application/json")
     public User customerLogin(@RequestBody Login login) throws UserNotFoundException {
 
         return customerLoginService.customerLogin(login);
 
     }
 
-    @PostMapping("/admin/login")
+    @PostMapping(value = "/admin/login", produces = "application/json", consumes = "application/json")
     public User adminLogin(@RequestBody Login login) throws UserNotFoundException {
 
         return adminLoginService.adminLogin(login);
