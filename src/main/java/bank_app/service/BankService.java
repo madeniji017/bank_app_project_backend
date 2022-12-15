@@ -14,7 +14,7 @@ public interface BankService {
 
     List<UserDTO> fetchUserList();
 
-    UserDTO updateUser(UserDTO userUpdate);
+    UserDTO updateUser(UserDTO userUpdate) throws UserNotFoundException;
 
     void deleteAccountByEmail(UserDTO userDTO) throws UserNotFoundException;
 
