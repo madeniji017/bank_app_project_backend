@@ -25,18 +25,16 @@ public class AdminLoginService {
             throw new UserNotFoundException("User not found");
 
 
-        } else {
+        } else if (admin.getRole().getId() != 1) {
 
-            if (!(Objects.equals(admin.getPassword(), login.getPassword()) &&
-                    admin.getRole().getId() == 1)) {
+            throw new UserNotFoundException("Not an admin. Please use the customer login");
+
+        } else if (!(Objects.equals(admin.getPassword(), login.getPassword()))) {
 
                 throw new UserNotFoundException("Invalid login details");
-
-            }
+        } else
 
             return admin;
         }
 
     }
-
-}
