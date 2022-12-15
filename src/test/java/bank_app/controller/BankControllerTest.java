@@ -44,10 +44,8 @@ class BankControllerTest {
 
         List<User> userList = new ArrayList<>();
 
-        User user1 = new User("Raji", "Fashola", "rfash@gmail.com",
-                "15 Musa road, Balarabe estate");
-        User user2 = new User("Phillip", "Ben", "pben@gmail.com",
-                "14 Elegant street, Ajao estate");
+        User user1 = new User("Raji", "Fashola", "rfash@gmail.com");
+        User user2 = new User("Phillip", "Ben", "pben@gmail.com");
 
         userList.add(user1);
         userList.add(user2);
@@ -67,13 +65,11 @@ class BankControllerTest {
     @Test
     void createUser() throws Exception {
 
-        User user1 = new User("Raji", "Fashola", "rfash@gmail.com",
-                "15 Musa road, Balarabe estate");
-        User savedUser = new User("Raji", "Fashola", "rfash@gmail.com",
-                "15 Musa road, Balarabe estate");
+        User user1 = new User("Raji", "Fashola", "rfash@gmail.com");
+        User user2 = new User("Phillip", "Ben", "pben@gmail.com");
 
         UserDTO userDTO1 = userConverter.convertEntityToDto(user1);
-        UserDTO savedUserDTO = userConverter.convertEntityToDto(savedUser);
+        UserDTO savedUserDTO = userConverter.convertEntityToDto(user2);
 
         Mockito.when(bankService.createUser(userDTO1)).thenReturn(savedUserDTO);
 
@@ -87,10 +83,9 @@ class BankControllerTest {
     }
 
     @Test
-    public void testEmailMustNotBeBlank() throws Exception {
+    void testEmailMustNotBeBlank() throws Exception {
 
-        User user1 = new User("Raji", "Fashola", "",
-                "15 Musa road, Balarabe estate");
+        User user1 = new User("Raji", "Fashola", "");
         UserDTO userDTO1 = userConverter.convertEntityToDto(user1);
 
         String url = "/create-user";
