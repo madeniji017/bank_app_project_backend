@@ -3,6 +3,7 @@ package bank_app.service;
 import bank_app.entity.Login;
 import bank_app.entity.PasswordEncoder;
 import bank_app.entity.User;
+import bank_app.error.UserNotFoundException;
 import bank_app.exception.ApiRequestException;
 import bank_app.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,27 @@ public class CustomerLoginService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User customerLogin(Login login) {
+    public User customerLogin(Login login) throws UserNotFoundException {
 
 
         User customer = userRepo.findByEmail(login.getEmail());
 
-        if (customer != null) {
+        if (customer == null) {
+
+            throw new UserNotFoundException("User not found");
+
+        } else {
 
             boolean confirmPassword = passwordEncoder.bCryptPasswordEncoder()
                     .matches(login.getPassword(), customer.getPassword());
 
-            if(confirmPassword && customer.getRole().getId() == 2) {
+            if(!(confirmPassword && customer.getRole().getId() == 2)) {
 
-                return customer;
+                throw new UserNotFoundException("Invalid email/password");
             }
 
-        } else {
-
-            throw new ApiRequestException("Invalid email/password");
         }
 
-        return null;
+        return customer;
     }
 }

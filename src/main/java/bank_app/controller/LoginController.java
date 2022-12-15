@@ -2,6 +2,7 @@ package bank_app.controller;
 
 import bank_app.entity.Login;
 import bank_app.entity.User;
+import bank_app.error.UserNotFoundException;
 import bank_app.service.AdminLoginService;
 import bank_app.service.CustomerLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,14 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public User customerLogin(@RequestBody Login login) {
+    public User customerLogin(@RequestBody Login login) throws UserNotFoundException {
 
         return customerLoginService.customerLogin(login);
 
     }
 
     @PostMapping("/admin/login")
-    public User adminLogin(@RequestBody Login login) {
+    public User adminLogin(@RequestBody Login login) throws UserNotFoundException {
 
         return adminLoginService.adminLogin(login);
 

@@ -2,8 +2,7 @@ package bank_app.service;
 
 import bank_app.entity.Login;
 import bank_app.entity.User;
-import bank_app.exception.AdminLoginException;
-import bank_app.exception.ApiRequestException;
+import bank_app.error.UserNotFoundException;
 import bank_app.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,25 +15,28 @@ public class AdminLoginService {
     @Autowired
     private UserRepo userRepo;
 
-    public User adminLogin(Login login) {
+    public User adminLogin(Login login) throws UserNotFoundException {
 
 
         User admin = userRepo.findByEmail(login.getEmail());
 
-        if (admin != null) {
+        if (admin == null) {
 
-            if(Objects.equals(admin.getPassword(), login.getPassword()) &&
-                    admin.getRole().getId() == 1) {
+            throw new UserNotFoundException("User not found");
 
-                return admin;
-            }
 
         } else {
 
-            throw new AdminLoginException("Unauthorized sign in attempt");
+            if (!(Objects.equals(admin.getPassword(), login.getPassword()) &&
+                    admin.getRole().getId() == 1)) {
+
+                throw new UserNotFoundException("Invalid login details");
+
+            }
+
+            return admin;
         }
 
-        return null;
     }
 
 }
