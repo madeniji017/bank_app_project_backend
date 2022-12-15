@@ -4,7 +4,6 @@ import bank_app.entity.Login;
 import bank_app.entity.PasswordEncoder;
 import bank_app.entity.User;
 import bank_app.error.UserNotFoundException;
-import bank_app.exception.ApiRequestException;
 import bank_app.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
