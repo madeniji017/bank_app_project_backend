@@ -10,7 +10,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.xml.transform.Source;
 import java.time.LocalDate;
 import java.util.List;
 @Component
@@ -19,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "user",
         uniqueConstraints = {@UniqueConstraint
                 (columnNames = {"email", "phoneNumber"})
@@ -40,13 +40,15 @@ public class User {
     private String lastName;
 
     @NotBlank
-    private String BVN;
+    @Length(max = 11)
+    private String bvn;
 
     @Email
     @NotEmpty(message = "Invalid email address")
     private String email;
 
     @NotBlank
+    @Length(max = 11)
     private String phoneNumber;
 
     @NotBlank
@@ -55,7 +57,6 @@ public class User {
     @NotBlank
     private String confirmPassword;
 
-    @NotBlank
     private LocalDate dateOfBirth;
 
     @Transient
@@ -71,7 +72,7 @@ public class User {
     //@Setter(AccessLevel.NONE)
     private List<Account> accounts;
 
-    public User(String firstName, String lastName, String email, String address) {
+    public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
