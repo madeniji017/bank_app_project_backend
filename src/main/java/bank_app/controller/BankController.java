@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:4000")
+@CrossOrigin(origins = "http://localhost:4000")
 @RestController
 @RequestMapping("api/v1")
 public class BankController {
@@ -49,19 +49,8 @@ public class BankController {
     }
 
     @PutMapping("/update-user")
-    public UserDTO updateUser(@RequestBody @Valid UserDTO userUpdate) {
+    public UserDTO updateUser(@RequestBody @Valid UserDTO userUpdate) throws UserNotFoundException {
         return bankService.updateUser(userUpdate);
     }
-
-
-    //ignore this for now
-    /*
-    @PostMapping("/create-account")
-    public Account createAccount(@RequestBody UserDTO userDTO) {
-
-        return bankService.createAccount(userDTO);
-    }
-
-     */
 
 }
