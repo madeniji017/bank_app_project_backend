@@ -8,7 +8,6 @@ import bank_app.entity.Role;
 import bank_app.entity.User;
 import bank_app.error.BadRequestException;
 import bank_app.error.UserNotFoundException;
-import bank_app.exception.ApiRequestException;
 import bank_app.repo.AccountRepo;
 import bank_app.repo.AcctNumGeneratorRepo;
 import bank_app.repo.RoleRepo;
@@ -22,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class BankServiceImpl implements BankService{
+public class BankServiceImpl implements BankService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -35,7 +34,6 @@ public class BankServiceImpl implements BankService{
     private Role role;
     @Autowired
     private RoleRepo roleRepo;
-    private Account account;
 
     @Autowired
     private AccountRepo accountRepo;
@@ -43,7 +41,6 @@ public class BankServiceImpl implements BankService{
     private AcctNumGenerator acctNumGenerator;
     @Autowired
     private AcctNumGeneratorRepo acctNumGeneratorRepo;
-
 
 
     public synchronized Long generateAcctNumber() {
@@ -77,6 +74,17 @@ public class BankServiceImpl implements BankService{
 
         if(Objects.equals(userDTO.getPassword(), userDTO.getConfirmPassword())) {
 
+            if(userDTO.getFirstName().length() < 3 ||
+            userDTO.getLastName().length() < 3) {
+                throw new BadRequestException("Length of first and last name must be a minimum of 3");
+            }
+
+            if(userDTO.getBvn().length() < 11 ||
+                    userDTO.getPhoneNumber().length() < 11) {
+                throw new BadRequestException("Length of bvn or phone number must be a minimum of 11");
+            }
+
+
             //assign from the db the role type with the id of 2
             Optional<Role> optionalRole = roleRepo.findById(2L);
             optionalRole.ifPresent(value -> role = value);
@@ -87,6 +95,7 @@ public class BankServiceImpl implements BankService{
             LocalDate date = LocalDate.parse(userDTO.getDateOfBirth(), formatter);
             user.setDateOfBirth(date);
 
+            //check this line very well
             userRepo.save(user);
 
             //generate an account and assign to this newly created user
@@ -95,16 +104,18 @@ public class BankServiceImpl implements BankService{
             Long userAcctNum = generateAcctNumber();
 
             //
-            account = new Account(user, userAcctNum);
+            Account account = new Account(user, userAcctNum);
 
-            if(user.getAcctType() == 1) {
+            if(user.getAcctType() == null) {
+                throw new BadRequestException("Please provide a valid account type");
+            } else if (user.getAcctType() == 1) {
                 account.setAcctType("Savings");
-            } else if (user.getAcctType() == 2) {
+            } else if(user.getAcctType() == 2) {
                 account.setAcctType("Current");
             } else {
-
                 throw new BadRequestException("Please provide a valid account type");
             }
+
 
             account.setUser(user);
             accountRepo.save(account);
@@ -160,47 +171,42 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userUpdate) {
+    public UserDTO updateUser(UserDTO userUpdate) throws UserNotFoundException {
 
         user = userConverter.convertDtoToEntity(userUpdate);
+        user = userRepo.findByEmail(user.getEmail());
 
-        List<Account> accounts = user.getAccounts();
+        if (user == null) {
 
-        if(Objects.nonNull(userUpdate.getFirstName()) && !"".equalsIgnoreCase(userUpdate.getFirstName())) {
-            user.setFirstName(userUpdate.getFirstName());
+            throw new UserNotFoundException("No user with the provided email");
 
-            //check the account attached to the provided user and update account name
-            accounts.forEach(account1 -> account1.setAcctFirstName(user.getFirstName()));
+        } else {
+
+            List<Account> accounts = user.getAccounts();
+
+            if (Objects.nonNull(userUpdate.getFirstName()) && !"".equalsIgnoreCase(userUpdate.getFirstName())) {
+                user.setFirstName(userUpdate.getFirstName());
+
+                //check the account attached to the provided user and update account name
+                accounts.forEach(account1 -> account1.setAcctFirstName(user.getFirstName()));
+            }
+
+            if (Objects.nonNull(userUpdate.getLastName()) && !"".equalsIgnoreCase(userUpdate.getLastName())) {
+                user.setLastName(userUpdate.getLastName());
+                accounts.forEach(account1 -> account1.setAcctLastName(user.getLastName()));
+            }
+
+            if (Objects.nonNull(userUpdate.getEmail()) &&
+                    !"".equalsIgnoreCase(userUpdate.getEmail())) {
+                user.setEmail(userUpdate.getEmail());
+
+            }
+
+            userRepo.save(user);
+
         }
-
-        if(Objects.nonNull(userUpdate.getLastName()) && !"".equalsIgnoreCase(userUpdate.getLastName())) {
-            user.setLastName(userUpdate.getLastName());
-            accounts.forEach(account1 -> account1.setAcctLastName(user.getLastName()));
-        }
-
-        if(Objects.nonNull(userUpdate.getEmail()) &&
-                !"".equalsIgnoreCase(userUpdate.getEmail())) {
-            user.setEmail(userUpdate.getEmail());
-        }
-
-        userRepo.save(user);
 
         return userConverter.convertEntityToDto(user);
     }
-
-    //ignore this for now
-    /*
-    @Override
-    public Account createAccount(UserDTO userDTO) {
-        user = userConverter.convertDtoToEntity(userDTO);
-        user = userRepo.findByEmail(userDTO.getEmail());
-        Long userAcctNum = generateAcctNumber();
-        account = new Account(user, userAcctNum);
-        account.setUser(user);
-        accountRepo.save(account);
-
-        return account;
-    }
-
-     */
 }
+

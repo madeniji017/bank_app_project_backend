@@ -24,7 +24,6 @@ public class AdminLoginService {
 
             throw new UserNotFoundException("User not found");
 
-
         } else if (admin.getRole().getId() != 1) {
 
             throw new UserNotFoundException("Not an admin. Please use the customer login");
