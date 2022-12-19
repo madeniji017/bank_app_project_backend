@@ -84,6 +84,9 @@ public class BankServiceImpl implements BankService {
                 throw new BadRequestException("Length of bvn or phone number must be a minimum of 11");
             }
 
+            if(userDTO.getPassword().length() < 8 ) {
+                throw new BadRequestException("Minimum password length of 7 is required");
+            }
 
             //assign from the db the role type with the id of 2
             Optional<Role> optionalRole = roleRepo.findById(2L);
@@ -95,7 +98,6 @@ public class BankServiceImpl implements BankService {
             LocalDate date = LocalDate.parse(userDTO.getDateOfBirth(), formatter);
             user.setDateOfBirth(date);
 
-            //check this line very well
             userRepo.save(user);
 
             //generate an account and assign to this newly created user
@@ -103,7 +105,6 @@ public class BankServiceImpl implements BankService {
             optionalUser.ifPresent(value -> user = value);
             Long userAcctNum = generateAcctNumber();
 
-            //
             Account account = new Account(user, userAcctNum);
 
             if(user.getAcctType() == null) {
@@ -162,11 +163,14 @@ public class BankServiceImpl implements BankService {
         user = userConverter.convertDtoToEntity(userDTO);
         user = userRepo.findByEmail(userDTO.getEmail());
 
-        if(user != null ) {
-            accountRepo.deleteAll(user.getAccounts());
+        if(user == null ) {
+
+            throw new UserNotFoundException("Cannot delete. No user with provided email");
 
         } else {
-            throw new UserNotFoundException("Cannot delete. No user with provided email");
+
+            accountRepo.deleteAll(user.getAccounts());
+
         }
     }
 
@@ -207,6 +211,7 @@ public class BankServiceImpl implements BankService {
         }
 
         return userConverter.convertEntityToDto(user);
+
     }
 }
 
