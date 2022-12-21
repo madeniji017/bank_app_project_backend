@@ -85,7 +85,7 @@ public class BankServiceImpl implements BankService {
             }
 
             if(userDTO.getPassword().length() < 8 ) {
-                throw new BadRequestException("Minimum password length of 7 is required");
+                throw new BadRequestException("Minimum password length of 8 is required");
             }
 
             //assign from the db the role type with the id of 2
@@ -98,14 +98,14 @@ public class BankServiceImpl implements BankService {
             LocalDate date = LocalDate.parse(userDTO.getDateOfBirth(), formatter);
             user.setDateOfBirth(date);
 
-            userRepo.save(user);
+            //userRepo.save(user);
 
             //generate an account and assign to this newly created user
-            Optional<User> optionalUser = userRepo.findById(user.getId());
-            optionalUser.ifPresent(value -> user = value);
-            Long userAcctNum = generateAcctNumber();
+           // Optional<User> optionalUser = userRepo.findById(user.getId());
+            //optionalUser.ifPresent(value -> user = value);
+            Long placeHolderAcctNum = 1L;
 
-            Account account = new Account(user, userAcctNum);
+            Account account = new Account(user, placeHolderAcctNum);
 
             if(user.getAcctType() == null) {
                 throw new BadRequestException("Please provide a valid account type");
@@ -117,6 +117,10 @@ public class BankServiceImpl implements BankService {
                 throw new BadRequestException("Please provide a valid account type");
             }
 
+            userRepo.save(user);
+
+            Long userAcctNum = generateAcctNumber();
+            account.setAcctNumber(userAcctNum);
 
             account.setUser(user);
             accountRepo.save(account);
