@@ -30,5 +30,4 @@ public class RestResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 
-
 }
