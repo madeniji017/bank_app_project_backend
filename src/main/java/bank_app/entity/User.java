@@ -30,14 +30,14 @@ public class User {
     private Long id;
     @NotBlank
     @Length(min = 3, max = 45)
-    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
+    //@Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String firstName;
 
-    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
+    //@Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String middleName;
     @NotBlank
     @Length(min = 3)
-    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
+    //@Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String lastName;
 
     @NotNull
