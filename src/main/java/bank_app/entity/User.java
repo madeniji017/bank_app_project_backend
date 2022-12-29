@@ -7,10 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 @Component
@@ -22,7 +19,7 @@ import java.util.List;
 @Builder
 @Table(name = "user",
         uniqueConstraints = {@UniqueConstraint
-                (columnNames = {"email", "phoneNumber"})
+                (columnNames = {"email", "phoneNumber", "bvn"})
         })
 
 public class User {
@@ -32,16 +29,18 @@ public class User {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     @NotBlank
-    @Length(min = 3)
+    @Length(min = 3, max = 45)
+    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String firstName;
 
+    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String middleName;
     @NotBlank
     @Length(min = 3)
+    @Pattern(regexp = "[A-Za-z]*", message = "Please enter an appropriate first name")
     private String lastName;
 
-    @NotBlank
-    @Length(max = 11)
+    @NotNull
     private String bvn;
 
     @Email
@@ -61,7 +60,7 @@ public class User {
 
     private LocalDate dateOfBirth;
 
-    @NotNull
+
     @Transient
     private Integer acctType;
 
