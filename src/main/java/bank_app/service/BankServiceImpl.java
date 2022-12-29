@@ -63,30 +63,46 @@ public class BankServiceImpl implements BankService {
     @Override
     public UserDTO createUser(UserDTO userDTO) throws BadRequestException {
 
-        user = userConverter.convertDtoToEntity(userDTO);
-
-        //encrypt the password & confirmPassword provided by the user
-        String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
-        user.setPassword(hashedPassword);
-
-        String hashedConfirmPassword = bCryptPasswordEncoder.encode(userDTO.getConfirmPassword());
-        user.setConfirmPassword(hashedConfirmPassword);
-
         if(Objects.equals(userDTO.getPassword(), userDTO.getConfirmPassword())) {
 
-            if(userDTO.getFirstName().length() < 3 ||
-            userDTO.getLastName().length() < 3) {
-                throw new BadRequestException("Length of first and last name must be a minimum of 3");
+            if(userDTO.getFirstName().length() < 3 || !(userDTO.getFirstName().matches("[A-Za-z]*"))) {
+                throw new BadRequestException("Are you 9ja at all? How is your first name less than 3?");
             }
 
-            if(userDTO.getBvn().length() < 11 ||
-                    userDTO.getPhoneNumber().length() < 11) {
-                throw new BadRequestException("Length of bvn or phone number must be a minimum of 11");
+            if(!(userDTO.getMiddleName().matches("[A-Za-z]*"))) {
+                throw new BadRequestException("Kindly fill in an appropriate middle name");
+            }
+
+            if(userDTO.getLastName().length() < 3 || !(userDTO.getLastName().matches("[A-Za-z]*"))) {
+                throw new BadRequestException("Length of last name must be a minimum of 3");
+            }
+
+            if(!(userDTO.getEmail().matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"))) {
+                throw new BadRequestException("Kindly use a valid email address");
+            }
+
+            if(userDTO.getBvn().length() != 11 || !(userDTO.getBvn().matches("[0-9]*"))) {
+                throw new BadRequestException("Length of bvn must be 11 and numbers only please");
+            }
+
+            if(userDTO.getPhoneNumber().length() != 11 ||
+                    !(userDTO.getPhoneNumber().matches("0" + "[7-9]" + "[0-1]" + "\\d*"))) {
+                throw new BadRequestException("Please use a valid phone number");
             }
 
             if(userDTO.getPassword().length() < 8 ) {
                 throw new BadRequestException("Minimum password length of 8 is required");
             }
+
+            user = userConverter.convertDtoToEntity(userDTO);
+
+            //encrypt the password & confirmPassword provided by the user
+            String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
+            user.setPassword(hashedPassword);
+
+            String hashedConfirmPassword = bCryptPasswordEncoder.encode(userDTO.getConfirmPassword());
+            user.setConfirmPassword(hashedConfirmPassword);
 
             //assign from the db the role type with the id of 2
             Optional<Role> optionalRole = roleRepo.findById(2L);
@@ -98,11 +114,6 @@ public class BankServiceImpl implements BankService {
             LocalDate date = LocalDate.parse(userDTO.getDateOfBirth(), formatter);
             user.setDateOfBirth(date);
 
-            //userRepo.save(user);
-
-            //generate an account and assign to this newly created user
-           // Optional<User> optionalUser = userRepo.findById(user.getId());
-            //optionalUser.ifPresent(value -> user = value);
             Long placeHolderAcctNum = 1L;
 
             Account account = new Account(user, placeHolderAcctNum);
@@ -117,7 +128,21 @@ public class BankServiceImpl implements BankService {
                 throw new BadRequestException("Please provide a valid account type");
             }
 
-            userRepo.save(user);
+            if(userRepo.findByEmail(userDTO.getEmail()) != null) {
+
+                throw new BadRequestException("No duplicate email allowed please");
+
+            } else if (userRepo.findByBvn(userDTO.getBvn()) != null) {
+
+                throw new BadRequestException("No duplicate bvn allowed please");
+
+            } else if (userRepo.findByPhoneNumber(user.getPhoneNumber()) != null) {
+
+                throw new BadRequestException("No duplicate phone number allowed please");
+            } else {
+
+                userRepo.save(user);
+            }
 
             Long userAcctNum = generateAcctNumber();
             account.setAcctNumber(userAcctNum);
