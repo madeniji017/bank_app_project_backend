@@ -2,7 +2,6 @@ package bank_app.converter;
 
 import bank_app.dto.UserDTO;
 import bank_app.entity.User;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +14,9 @@ public class UserConverter {
 
     public UserDTO convertEntityToDto(User user) {
 
-//        ModelMapper modelMapper = new ModelMapper();
-//        return modelMapper.map(user, UserDTO.class);
         UserDTO dto = new UserDTO();
         BeanUtils.copyProperties(user, dto);
+
         return dto;
 
     }
@@ -32,8 +30,10 @@ public class UserConverter {
 
     public User convertDtoToEntity(UserDTO userDTO) {
 
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(userDTO, User.class);
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+
+        return user;
     }
 
     public List<User> convertDtoListToEntity(List<UserDTO> userDTOList) {
