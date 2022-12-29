@@ -8,8 +8,10 @@ public interface UserRepo extends GenericRepo<User> {
 
     User findByEmail(String email);
 
-    User findByBvn(String bvn);
+    Boolean existsByEmail(String email);
 
-    User findByPhoneNumber(String phoneNumber);
+    Boolean existsByBvn(String bvn);
+
+    Boolean existsByPhoneNumber(String phoneNumber);
 
 }

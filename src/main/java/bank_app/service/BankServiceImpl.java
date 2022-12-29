@@ -128,17 +128,18 @@ public class BankServiceImpl implements BankService {
                 throw new BadRequestException("Please provide a valid account type");
             }
 
-            if(userRepo.findByEmail(userDTO.getEmail()) != null) {
+            if(userRepo.existsByEmail(userDTO.getEmail())) {
 
                 throw new BadRequestException("No duplicate email allowed please");
 
-            } else if (userRepo.findByBvn(userDTO.getBvn()) != null) {
+            } else if (userRepo.existsByBvn(userDTO.getBvn())) {
 
                 throw new BadRequestException("No duplicate bvn allowed please");
 
-            } else if (userRepo.findByPhoneNumber(user.getPhoneNumber()) != null) {
+            } else if (userRepo.existsByPhoneNumber(userDTO.getPhoneNumber())) {
 
                 throw new BadRequestException("No duplicate phone number allowed please");
+
             } else {
 
                 userRepo.save(user);
