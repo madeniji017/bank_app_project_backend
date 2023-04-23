@@ -77,7 +77,7 @@ pipeline {
        }
        stage("Deploy"){
             steps {
-                sh ''' ${ansibleDeploy()} '''        
+                sh ''' ${AnsibleDeploy()} '''        
             }
 
 
