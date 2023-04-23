@@ -1,3 +1,9 @@
+ansibleDeploy(){
+    sh 'ANSIBLE_HOST_CHECKING_KEY=false ansible-playbook --timeout 60 -i host.ini ansible/playbook.yml'
+
+}
+
+
 pipeline {
     
     environment {
@@ -7,7 +13,7 @@ pipeline {
         HOST_PORT='6666'
         APP_LOGS='usr/logs'
     }
-    
+
     agent any
 
 
@@ -65,6 +71,7 @@ pipeline {
                 script{
                     sh "docker login -u ${env.user} -p ${env.passwd}"
                     sh "docker push mlarry/backend_app"
+                    ansibleDeploy()
                 }
             }
 
