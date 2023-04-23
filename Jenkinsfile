@@ -1,4 +1,4 @@
-ansibleDeploy(){
+AnsibleDeploy(){
     sh 'ANSIBLE_HOST_CHECKING_KEY=false ansible-playbook --timeout 60 -i host.ini ansible/playbook.yml'
 
 }
