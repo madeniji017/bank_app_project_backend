@@ -1,0 +1,6 @@
+---
+APP_NAME: {{lookup('env', 'APP_NAME')}}
+IMG_TAG: {{lookup('env', 'IMG_TAG')}}
+CONTAINER_PORT: {{lookup('env', 'CONTAINER_PORT')}}
+HOST_PORT: {{lookup('env', 'HOST_PORT')}}
+APP_LOGS: {{('env', 'APP_LOGS')}}

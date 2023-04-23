@@ -1,0 +1,85 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Default": "Debug",
+        "Microsoft": "Debug",
+        "System": "Debug"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "File",
+        "Args": {
+          "path": "/var/logs/unifiedidapi/unifiedidapi.log",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.ffff}|{TenantName}|{RequestId}|{SourceContext}|{Level:u3}|{Message:lj}{NewLine}{Exception}",
+          "restrictedToMinimumLevel": "Information",
+          "rollingInterval": "Day",
+          "rollOnFileSizeLimit": true,
+          "fileSizeLimitBytes": "52428800"
+          // "retainedFileCountLimit": 2000
+        }
+      }
+    ]
+  },
+  "ConnectionStrings": {
+    "BvnConnectionString": "Server=10.2.3.121;Database=bvnportal_db;Trusted_Connection=false;MultipleActiveResultSets=True; Connection Timeout=180;Max Pool Size=200;persist security info=True;user id=bvnapp;password=Admin1234@",
+    "AppConnectionString": "Server=10.4.4.247;Database=UnifiedIdApi;Trusted_Connection=false;MultipleActiveResultSets=True;persist security info=True; Connection Timeout=180;Max Pool Size=200;user id=unifiedapi;password=YUHB1230Mark",
+    "NimcConnectionString": "Server=10.4.4.91;Database=nimc;Trusted_Connection=false;Connection Timeout=180;Max Pool Size=200;MultipleActiveResultSets=True;persist security info=True;user id=user_nimc;password=Nim098yts033"
+
+  },
+  "Nimc": {
+    "BaseUrl": "http://10.3.3.186:8050",
+    "OrgId": "4975",
+    "Password": "NzU2NDQ5MjgzOTkzMjQ3ODAwNjEyOTA0NzU0MDkxMjcyMzU0MDY0NzcxNTIxMTUwMDg4MDU5MTYyODUwNTY1NzY5MTA1NDk0NzcwNzM4MTc2MDgwMzI3NTkzMjczNDAyNjc3NjQxNjQ0NDg3MDM2ODUxMDAzNjgwMzM4MzQzNjgwMzgxOTI3Mzc2NDgxODUxMjU2MDY2MzIwMTMwMzczMTkyMDE2MjA0Nzk3NzkzOTU5NDM2Mjk2ODc2NDc4NDc3MDAzODUwOTkxMjk1NzQyNzEyODAyNTI5MDk2Mzg1Mjc3NTk0NjA5MjI3NDcwNzU0OTY1NDkyMjMzNDUxNTc5ODY4MDIwMzA4ODY3MzExMjEwNjI1ODkzODY2MDU5NDUxODY3NTYxMDIzODQ5Mjg4MTY1OTU=",
+    "UserName": "NIBSAPIUSR",
+    "Token": ""
+  },
+
+ "Frsc": {
+        "BaseUrl": "http://41.222.209.238:2221/dlservice/verify",
+        "SubscriberRef": "NIBSS",
+        "SubscriberToken": "def33-d760e-a1ef4-cdba3-cf110"
+    },
+
+ "Jtb": {     
+        "BaseUrl": "https://api.jtb.gov.ng:2087/api",     
+        "Email": "devops@nibss-plc.com.ng",     
+        "Clientname": "jtb",     
+        "Password": "Integration@321",     
+        "IsTestMode": false
+   },
+  "SmtpSettings": {
+    "Host": "192.168.202.223",
+    "Port": "25",
+    "Username": "unifiedapi@nibss-plc.com.ng",
+    "Password": "Un$$12366t",
+    "Domain": "nibss-plc.com.ng",
+    "From": "unifiedapi@nibss-plc.com.ng"
+  },
+
+
+  "Settings": {
+    "AppName": "Unified ID API",
+    "IDPortalUrl": "http://10.7.7.75:8085/api/v1/genericBilling/addNewBill",
+    "EnableSwagger": "true",
+    "Bulk_Size": "10",
+    "TokenExpiryInMinute": "10",
+    "AccessTokenExpiryInMinute": "30",
+    "AppId": "86165349-111a-4713-8964-f4e0fbd27bbd"
+
+  },
+  "StatsDSettings": {
+    "ServerIP": "127.0.0.1",
+    "Port": "8188",
+    "Prefix": "UnifiedIdApi"
+  },
+  "AllowedHosts": "*"
+}

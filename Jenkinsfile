@@ -1,6 +1,15 @@
 pipeline {
     
+    environment {
+        APP_NAME='bankapp project'
+        IMG_TAG='bankapp'
+        CONTAINER_PORT='5000'
+        HOST_PORT='6666'
+        APP_LOGS='usr/logs'
+    }
+    
     agent any
+
 
     stages {
         stage('Initial_cleanup'){

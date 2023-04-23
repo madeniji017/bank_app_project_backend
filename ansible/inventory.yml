@@ -1,0 +1,8 @@
+[serverbox]
+192.168.43.229
+192.168.43.83
+
+
+ansible_ssh_user=monday
+ansible_ssh_pass="adeniji"
+ansible_become_pass="adeniji"

@@ -7,7 +7,7 @@ services:
   backend:
     build: ./
     ports:
-      - 3000:3000
+      - 3200:3000
     # environment:
     #   DB_URL: mysql://database/bank_backend 
   database:

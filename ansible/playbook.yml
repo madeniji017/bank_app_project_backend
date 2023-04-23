@@ -1,0 +1,9 @@
+- name: servers
+  hosts: serverbox
+  become: true
+  remote_user: monday
+  vars_file:
+  - ./vars/main.yml
+  roles:
+  - docker-deploy
+
