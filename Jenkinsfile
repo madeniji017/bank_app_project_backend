@@ -71,11 +71,17 @@ pipeline {
                 script{
                     sh "docker login -u ${env.user} -p ${env.passwd}"
                     sh "docker push mlarry/backend_app"
-                    ansibleDeploy()
+
                 }
             }
+       }
+       stage("Deploy"){
+            steps {
+                sh ''' ${ansibleDeploy()} '''        
+            }
 
-        }
+
+       }
          stage("Docker logout"){
             steps{
                 script{
